@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Guardian Workshop — Responsible AI Governance · AI & Society</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Epilogue:wght@300;400;500;600&family=Epilogue:ital,wght@1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --white:#FFFFFF; --black:#0D0D0D; --green:#3EBF6A; --red:#E84B3A;
+    --purple:#9B7FD4; --lavender:#C5B8E8; --yellow:#F5C842; --blue:#7BB8D4;
+    --offwhite:#F5F4F0; --mid:#555555; --border:#E0DDD8;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{font-family:'Epilogue',sans-serif;background:var(--white);color:var(--black);overflow-x:hidden;}
+
+  /* NAV */
+  nav{display:flex;align-items:center;justify-content:space-between;padding:20px 56px;border-bottom:1.5px solid var(--border);background:var(--white);position:sticky;top:0;z-index:100;}
+  .logo{display:flex;align-items:center;gap:10px;}
+  .logo-box{background:var(--black);color:var(--white);font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:800;line-height:1.25;padding:7px 9px;}
+  .logo-text{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;letter-spacing:0.04em;}
+  .nav-pills{display:flex;gap:8px;flex-wrap:wrap;}
+  .pill{font-family:'Epilogue',sans-serif;font-size:12px;font-weight:500;padding:6px 14px;border-radius:100px;}
+  .pill-green{background:var(--green);color:var(--white);}
+  .pill-red{background:var(--red);color:var(--white);}
+  .pill-purple{background:var(--purple);color:var(--white);}
+  .pill-yellow{background:var(--yellow);color:var(--black);}
+  .pill-blue{background:var(--blue);color:var(--black);}
+  .nav-links{display:flex;gap:8px;align-items:center;}
+  .nav-icon{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:6px;background:#F0F0EC;color:var(--black);text-decoration:none;transition:all 0.2s;}
+  .nav-icon:hover{background:#0A66C2;color:#fff;}
+  .nav-link-text{display:flex;align-items:center;justify-content:center;padding:7px 12px;height:34px;border-radius:6px;background:#F0F0EC;color:var(--black);font-size:12px;font-weight:600;text-decoration:none;white-space:nowrap;transition:all 0.2s;}
+  .nav-link-text:hover{background:#0A66C2;color:#fff;}
+
+  /* HERO */
+  .hero{background:var(--black);padding:80px 56px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;position:relative;overflow:hidden;min-height:520px;}
+  .hero::before{content:'';position:absolute;width:400px;height:400px;border-radius:50%;background:var(--purple);opacity:0.12;top:-120px;right:-80px;pointer-events:none;}
+  .hero::after{content:'';position:absolute;width:200px;height:200px;border-radius:50%;background:var(--yellow);opacity:0.1;bottom:-60px;left:40%;pointer-events:none;}
+  .hero-left{position:relative;z-index:2;}
+  .hero-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:100px;padding:6px 14px;font-size:11px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--yellow);margin-bottom:28px;}
+  .hero-tag span{width:6px;height:6px;border-radius:50%;background:var(--yellow);display:block;}
+  .hero h1{font-family:'Barlow Condensed',sans-serif;font-size:clamp(48px,6vw,82px);font-weight:900;color:var(--white);line-height:0.95;letter-spacing:-0.01em;margin-bottom:28px;}
+  .hero h1 .accent{color:var(--green);}
+  .hero-desc{font-size:16px;font-weight:300;color:rgba(255,255,255,0.6);line-height:1.75;max-width:460px;margin-bottom:36px;}
+  .hero-meta{display:flex;gap:28px;flex-wrap:wrap;}
+  .meta-chip{display:flex;flex-direction:column;gap:3px;}
+  .meta-chip .label{font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.35);font-weight:500;}
+  .meta-chip .value{font-size:14px;font-weight:500;color:var(--white);}
+  .hero-right{position:relative;z-index:2;display:flex;flex-direction:column;gap:16px;}
+  .presenter-card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:28px;backdrop-filter:blur(10px);}
+  .presenter-card .pre-label{font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:14px;}
+  .presenter-row{display:flex;align-items:center;gap:14px;}
+  .avatar{width:48px;height:48px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;color:var(--white);flex-shrink:0;}
+  .presenter-name{font-size:17px;font-weight:600;color:var(--white);}
+  .presenter-role{font-size:13px;font-weight:300;color:rgba(255,255,255,0.45);margin-top:2px;}
+  .framework-badge{background:var(--purple);border-radius:10px;padding:22px 28px;display:flex;align-items:center;gap:16px;}
+  .badge-num{font-family:'Barlow Condensed',sans-serif;font-size:48px;font-weight:900;color:var(--white);line-height:1;opacity:0.9;}
+  .badge-text{display:flex;flex-direction:column;gap:3px;}
+  .badge-text strong{font-size:15px;font-weight:600;color:var(--white);}
+  .badge-text span{font-size:13px;font-weight:300;color:rgba(255,255,255,0.65);}
+
+  /* CAT BAR */
+  .cat-bar{display:grid;grid-template-columns:repeat(5,1fr);border-bottom:1.5px solid var(--border);}
+  .cat-item{padding:18px 24px;border-right:1.5px solid var(--border);display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;}
+  .cat-item:last-child{border-right:none;}
+  .cat-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+
+  /* SHARED SECTION STYLES */
+  .section-eyebrow{font-size:11px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:var(--green);margin-bottom:14px;}
+  h2{font-family:'Barlow Condensed',sans-serif;font-size:clamp(28px,3.5vw,48px);font-weight:900;line-height:1.0;letter-spacing:-0.01em;margin-bottom:20px;}
+  .body-text{font-size:16px;font-weight:300;color:var(--mid);line-height:1.78;margin-bottom:18px;}
+  .body-text strong{color:var(--black);font-weight:600;}
+
+  /* INTRO */
+  .intro-section{padding:80px 56px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;border-bottom:1.5px solid var(--border);}
+  .stats-row{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--border);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;}
+  .stat-box{background:var(--offwhite);padding:28px 24px;}
+  .stat-num{font-family:'Barlow Condensed',sans-serif;font-size:42px;font-weight:900;line-height:1;margin-bottom:6px;}
+  .stat-desc{font-size:13px;color:var(--mid);font-weight:300;line-height:1.45;}
+
+  /* AI6 FRAMEWORK */
+  .framework-section{padding:80px 56px;background:var(--offwhite);border-bottom:1.5px solid var(--border);}
+  .framework-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:48px;flex-wrap:wrap;gap:20px;}
+  .framework-header p{font-size:15px;font-weight:300;color:var(--mid);max-width:460px;line-height:1.65;}
+  .practices-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+  .practice-card{background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:32px 28px;position:relative;transition:transform 0.2s ease,box-shadow 0.2s ease;cursor:default;overflow:hidden;}
+  .practice-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;opacity:0;transition:opacity 0.2s ease;}
+  .practice-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,0.08);}
+  .practice-card:hover::before{opacity:1;}
+  .pc-1::before{background:var(--green);} .pc-2::before{background:var(--red);} .pc-3::before{background:var(--purple);}
+  .pc-4::before{background:var(--yellow);} .pc-5::before{background:var(--blue);} .pc-6::before{background:var(--black);}
+  .practice-num-wrap{display:flex;align-items:center;gap:12px;margin-bottom:18px;}
+  .p-num{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--white);flex-shrink:0;}
+  .p-num-1{background:var(--green);} .p-num-2{background:var(--red);} .p-num-3{background:var(--purple);}
+  .p-num-4{background:var(--yellow);color:var(--black);} .p-num-5{background:var(--blue);color:var(--black);} .p-num-6{background:var(--black);}
+  .practice-card h3{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;line-height:1.15;margin-bottom:12px;letter-spacing:-0.01em;}
+  .practice-desc{font-size:14px;font-weight:300;color:var(--mid);line-height:1.65;margin-bottom:18px;}
+  .bullets{list-style:none;display:flex;flex-direction:column;gap:7px;margin-bottom:20px;}
+  .bullets li{font-size:13px;color:var(--mid);padding-left:16px;position:relative;line-height:1.5;}
+  .bullets li::before{content:'';position:absolute;left:0;top:7px;width:5px;height:5px;border-radius:50%;}
+  .b1 li::before{background:var(--green);} .b2 li::before{background:var(--red);} .b3 li::before{background:var(--purple);}
+  .b4 li::before{background:var(--yellow);} .b5 li::before{background:var(--blue);} .b6 li::before{background:var(--black);}
+  .key-q-label{font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:#AAAAAA;font-weight:500;margin-bottom:5px;}
+  .key-q{font-size:13px;font-weight:600;font-style:italic;color:var(--black);}
+
+  /* INTERACTIVE MOMENTS */
+  .moments-section{padding:80px 56px;border-bottom:1.5px solid var(--border);}
+  .moments-timeline{display:flex;flex-direction:column;gap:0;}
+  .moment-row{display:grid;grid-template-columns:110px 1fr;gap:0;border:1.5px solid var(--border);border-bottom:none;overflow:hidden;}
+  .moment-row:first-child{border-radius:12px 12px 0 0;}
+  .moment-row:last-child{border-bottom:1.5px solid var(--border);border-radius:0 0 12px 12px;}
+  .moment-label{padding:24px 16px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;}
+  .moment-label-text{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;color:var(--white);line-height:1.1;}
+  .moment-label-time{font-size:10px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.65);margin-top:4px;}
+  .moment-body{background:var(--white);padding:24px 28px;}
+  .moment-tag{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;border-radius:100px;margin-bottom:10px;}
+  .moment-q{font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:800;color:var(--black);margin-bottom:8px;line-height:1.15;letter-spacing:-0.01em;}
+  .moment-desc{font-size:14px;font-weight:300;color:var(--mid);line-height:1.65;}
+  .menti-opts-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:12px;}
+  .menti-opt{background:var(--offwhite);border:1.5px solid var(--border);border-radius:6px;padding:7px 12px;font-size:12px;font-weight:500;}
+
+  /* HOW IT WORKS */
+  .how-section{padding:80px 56px;border-bottom:1.5px solid var(--border);}
+  .steps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:48px;border:1.5px solid var(--border);border-radius:12px;overflow:hidden;}
+  .step{padding:36px 28px;border-right:1.5px solid var(--border);background:var(--white);transition:background 0.2s;}
+  .step:last-child{border-right:none;}
+  .step:hover{background:var(--offwhite);}
+  .step-pill{display:inline-block;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;padding:4px 12px;border-radius:100px;margin-bottom:16px;letter-spacing:0.06em;}
+  .s1{background:var(--green);color:var(--white);} .s2{background:var(--red);color:var(--white);}
+  .s3{background:var(--purple);color:var(--white);} .s4{background:var(--yellow);color:var(--black);}
+  .step h4{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:800;margin-bottom:10px;letter-spacing:-0.01em;}
+  .step p{font-size:13px;color:var(--mid);line-height:1.65;font-weight:300;}
+
+  /* SCENARIOS SECTION */
+  .scenarios-section{padding:80px 56px;background:var(--offwhite);border-bottom:1.5px solid var(--border);}
+  .scenarios-intro{max-width:680px;margin-bottom:56px;}
+
+  /* Scenario card */
+  .scenario-card{background:var(--white);border:1.5px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:20px;}
+  .scenario-card:last-child{margin-bottom:0;}
+  .sc-top{display:grid;grid-template-columns:auto 1fr;gap:0;}
+  .sc-colour-bar{width:6px;flex-shrink:0;}
+  .sc-header-content{padding:28px 32px 20px;}
+  .sc-header-row{display:flex;align-items:center;gap:14px;margin-bottom:10px;}
+  .sc-badge{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--white);flex-shrink:0;}
+  .sc-emoji{font-size:24px;line-height:1;}
+  .sc-scenario-title{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;letter-spacing:-0.01em;line-height:1.1;}
+  .sc-scenario-desc{font-size:14px;font-weight:300;color:var(--mid);line-height:1.7;padding:0 32px 24px;}
+
+  /* Prompts grid */
+  .prompts-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--border);border-top:1.5px solid var(--border);}
+  .prompt-cell{background:var(--white);padding:24px 26px;}
+  .prompt-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+  .prompt-num{width:26px;height:26px;border-radius:6px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--white);}
+  .prompt-title{font-size:13px;font-weight:600;letter-spacing:0.01em;}
+  .prompt-q{font-size:13px;font-weight:400;color:var(--black);line-height:1.6;padding-left:14px;border-left:2px solid var(--border);margin-bottom:8px;}
+  .prompt-q+.prompt-q{margin-top:8px;}
+  .write-line{background:var(--offwhite);border:1.5px dashed var(--border);border-radius:6px;padding:12px 14px;font-size:12px;color:#AAAAAA;font-style:italic;min-height:48px;display:flex;align-items:center;margin-top:10px;}
+
+  /* Binary checks */
+  .binary-strip{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--border);border-top:1.5px solid var(--border);}
+  .binary-cell{background:var(--offwhite);padding:20px 26px;display:flex;align-items:center;gap:16px;}
+  .binary-text{flex:1;font-size:13px;font-weight:300;color:var(--mid);line-height:1.5;}
+  .binary-text strong{color:var(--black);font-weight:600;display:block;margin-bottom:2px;}
+  .yn-wrap{display:flex;gap:6px;flex-shrink:0;}
+  .yn-box{width:38px;height:38px;border:1.5px solid var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--mid);background:var(--white);}
+
+  /* EXAMPLE TAG */
+  .example-tag{display:inline-flex;align-items:center;gap:6px;background:var(--green);color:var(--white);font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:4px 12px;border-radius:100px;margin-bottom:12px;}
+
+  /* Worked answer */
+  .worked-cell{background:var(--white);}
+  .worked-body{font-size:13px;font-weight:300;color:var(--mid);line-height:1.7;}
+  .worked-body strong{color:var(--black);font-weight:600;}
+
+  /* DEBRIEF */
+  .cta-band{background:var(--lavender);padding:70px 56px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;border-bottom:1.5px solid var(--border);}
+  .debrief-list{list-style:none;display:flex;flex-direction:column;gap:12px;}
+  .debrief-list li{display:flex;align-items:flex-start;gap:12px;font-size:15px;font-weight:400;line-height:1.5;}
+  .debrief-list li .dot{width:8px;height:8px;background:var(--black);border-radius:50%;flex-shrink:0;margin-top:7px;}
+
+  /* KEY TAKEAWAYS */
+  .takeaways-section{background:var(--black);padding:80px 56px;}
+  .takeaways-inner{max-width:960px;margin:0 auto;}
+
+  /* FOOTER */
+  footer{background:var(--black);color:var(--white);padding:56px 56px 40px;border-top:1px solid rgba(255,255,255,0.08);}
+  .footer-top{display:grid;grid-template-columns:1fr 1fr 1fr;gap:40px;padding-bottom:40px;border-bottom:1px solid rgba(255,255,255,0.1);margin-bottom:32px;}
+  .footer-brand p{font-size:13px;font-weight:300;color:rgba(255,255,255,0.45);line-height:1.65;max-width:240px;margin-top:12px;}
+  .footer-col h4{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:16px;}
+  .footer-col p,.footer-col a{display:block;font-size:14px;font-weight:300;color:rgba(255,255,255,0.7);line-height:2;text-decoration:none;transition:color 0.2s;}
+  .footer-col a:hover{color:var(--green);}
+  .footer-col .hl{color:var(--green);font-weight:500;}
+  .footer-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+  .footer-bottom span{font-size:12px;color:rgba(255,255,255,0.25);font-weight:300;}
+  .footer-pills{display:flex;gap:8px;flex-wrap:wrap;}
+  .logo-box-f{background:var(--white);color:var(--black);font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:800;line-height:1.3;padding:7px 10px;text-align:center;display:inline-block;}
+
+  /* ANIMATIONS */
+  @keyframes fadeDown{from{opacity:0;transform:translateY(-12px);}to{opacity:1;transform:none;}}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:none;}}
+
+  /* RESPONSIVE */
+  @media(max-width:960px){
+    nav,footer{padding-left:24px;padding-right:24px;}
+    .hero,.intro-section,.framework-section,.moments-section,.how-section,.scenarios-section,.cta-band,.takeaways-section{padding-left:24px;padding-right:24px;}
+    .hero{grid-template-columns:1fr;min-height:auto;gap:36px;padding-top:48px;padding-bottom:48px;}
+    .intro-section{grid-template-columns:1fr;}
+    .practices-grid{grid-template-columns:1fr 1fr;}
+    .steps-grid{grid-template-columns:1fr 1fr;}
+    .step{border-bottom:1.5px solid var(--border);}
+    .step:nth-child(2){border-right:none;}
+    .step:nth-child(3){border-right:1.5px solid var(--border);border-bottom:none;}
+    .cta-band{grid-template-columns:1fr;}
+    .footer-top{grid-template-columns:1fr 1fr;}
+    .cat-bar{grid-template-columns:repeat(3,1fr);}
+    .nav-pills{display:none;}
+    .prompts-grid{grid-template-columns:1fr;}
+    .binary-strip{grid-template-columns:1fr;}
+    .menti-opts-grid{grid-template-columns:1fr;}
+  }
+  @media(max-width:600px){
+    .practices-grid{grid-template-columns:1fr;}
+    .steps-grid{grid-template-columns:1fr;}
+    .step{border-right:none !important;}
+    .stats-row{grid-template-columns:1fr;}
+    .footer-top{grid-template-columns:1fr;}
+    .cat-bar{grid-template-columns:1fr 1fr;}
+    .sc-top{grid-template-columns:auto 1fr;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <div class="logo">
+    <div class="logo-box">Ai&<br>society</div>
+    <span class="logo-text">AI & Society</span>
+  </div>
+  <div class="nav-pills">
+    <span class="pill pill-green">Learning</span>
+    <span class="pill pill-red">Events</span>
+    <span class="pill pill-purple">News</span>
+    <span class="pill pill-yellow">Community</span>
+    <span class="pill pill-blue">Sponsorship</span>
+  </div>
+  <div class="nav-links">
+    <a href="https://www.linkedin.com/company/ai-and-society/" target="_blank" class="nav-icon" title="AI & Society on LinkedIn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+    </a>
+    <a href="https://www.linkedin.com/in/sophiaarkinstall/" target="_blank" class="nav-link-text">Sophia ↗</a>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<header class="hero">
+  <div class="hero-left">
+    <div class="hero-tag"><span></span>Workshop · Responsible AI Governance</div>
+    <h1>The Guardian<br><span class="accent">Workshop</span></h1>
+    <p class="hero-desc">Applying Australia's Guidance for AI Adoption — 6 essential practices every organisation needs before deploying AI. Learn the framework, then test it yourself.</p>
+    <div class="hero-meta">
+      <div class="meta-chip">
+        <span class="label">Event</span>
+        <span class="value">Moreton Bay Women Building Tomorrow's Tech</span>
+      </div>
+      <div class="meta-chip">
+        <span class="label">Format</span>
+        <span class="value">Group Scenario Activity</span>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="presenter-card">
+      <div class="pre-label">Your Facilitators</div>
+      <div class="presenter-row" style="margin-bottom:16px;">
+        <div class="avatar">SA</div>
+        <div>
+          <div class="presenter-name">Sophia Arkinstall</div>
+          <div class="presenter-role">Founder, AI & Society · Brisbane, Australia</div>
+        </div>
+      </div>
+      <div style="height:1px;background:rgba(255,255,255,0.08);margin-bottom:16px;"></div>
+      <div class="presenter-row">
+        <div class="avatar" style="background:var(--purple);">VF</div>
+        <div>
+          <div class="presenter-name">Veve Fry</div>
+          <div class="presenter-role">Assistant Facilitator · AI & Society</div>
+        </div>
+      </div>
+    </div>
+    <div class="framework-badge">
+      <div class="badge-num">6</div>
+      <div class="badge-text">
+        <strong>Essential Practices</strong>
+        <span>Australia's Guidance for AI Adoption</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══ CATEGORY BAR ═══ -->
+<div class="cat-bar">
+  <div class="cat-item"><div class="cat-dot" style="background:var(--green)"></div>Accountability</div>
+  <div class="cat-item"><div class="cat-dot" style="background:var(--red)"></div>Impacts</div>
+  <div class="cat-item"><div class="cat-dot" style="background:var(--purple)"></div>Risk Management</div>
+  <div class="cat-item"><div class="cat-dot" style="background:var(--yellow)"></div>Transparency</div>
+  <div class="cat-item"><div class="cat-dot" style="background:var(--blue)"></div>Testing & Control</div>
+</div>
+
+<!-- ═══ INTRO ═══ -->
+<section class="intro-section">
+  <div>
+    <div class="section-eyebrow">About This Session</div>
+    <h2>Why Responsible AI Governance Matters</h2>
+    <p class="body-text">AI systems can make automated decisions that <strong>significantly impact people, communities and businesses</strong> — often at speed and scale. A single misconfigured system can cause widespread harm before anyone notices.</p>
+    <p class="body-text">This workshop introduces Australia's <strong>Guidance for AI Adoption</strong> — a practical, six-principle framework designed to help any organisation deploy AI responsibly. You'll learn the framework, then apply it yourself to real-world scenarios.</p>
+    <a href="https://www.industry.gov.au/publications/guidance-for-ai-adoption/guidance-ai-adoption-implementation-practices" target="_blank" style="display:inline-flex;align-items:center;gap:8px;margin-top:8px;background:var(--offwhite);border:1.5px solid var(--border);border-radius:8px;padding:11px 18px;font-size:13px;font-weight:600;color:var(--black);text-decoration:none;transition:all 0.2s;" onmouseover="this.style.background='#3EBF6A';this.style.borderColor='#3EBF6A';this.style.color='#fff'" onmouseout="this.style.background='var(--offwhite)';this.style.borderColor='var(--border)';this.style.color='var(--black)'">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      Read the full AI6 Framework — Australian Government ↗
+    </a>
+  </div>
+  <div>
+    <div class="stats-row">
+      <div class="stat-box"><div class="stat-num" style="color:var(--green)">6</div><div class="stat-desc">Essential practices for responsible AI adoption</div></div>
+      <div class="stat-box"><div class="stat-num" style="color:var(--red)">6</div><div class="stat-desc">Real-world scenarios for your group to work through</div></div>
+      <div class="stat-box"><div class="stat-num" style="color:var(--purple)">3K+</div><div class="stat-desc">AI & Society community members across Australia</div></div>
+      <div class="stat-box"><div class="stat-num" style="color:var(--yellow)">AU</div><div class="stat-desc">Government-aligned guidance for Australian organisations</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ AI6 FRAMEWORK ═══ -->
+<section class="framework-section">
+  <div class="framework-header">
+    <div>
+      <div class="section-eyebrow">The Framework</div>
+      <h2>AI6 — Six Essential Practices</h2>
+    </div>
+    <p>Each practice addresses a different dimension of responsible AI governance. Hover each card to highlight.</p>
+  </div>
+  <div class="practices-grid">
+    <div class="practice-card pc-1">
+      <div class="practice-num-wrap"><div class="p-num p-num-1">01</div></div>
+      <h3>Decide Who Is Accountable</h3>
+      <p class="practice-desc">AI creates gaps where no one takes clear responsibility. Accountability must be explicitly assigned before anything is deployed.</p>
+      <ul class="bullets b1">
+        <li>Name a specific person responsible for every AI system</li>
+        <li>Define roles across the full supply chain — developers, deployers, third parties</li>
+        <li>Build AI literacy and training across the organisation</li>
+        <li>Document governance policies and consequences for non-compliance</li>
+      </ul>
+      <div class="key-q-label">Key Question</div>
+      <div class="key-q">Who can be named right now?</div>
+    </div>
+    <div class="practice-card pc-2">
+      <div class="practice-num-wrap"><div class="p-num p-num-2">02</div></div>
+      <h3>Understand Impacts & Plan Accordingly</h3>
+      <p class="practice-desc">AI operates at speed and scale — potential harms are magnified. Plan for impacts before deployment, not after.</p>
+      <ul class="bullets b2">
+        <li>Identify all stakeholders who may be affected, including vulnerable groups</li>
+        <li>Assess potential harms, bias risks, and discriminatory outputs</li>
+        <li>Create clear, accessible channels for people to raise concerns</li>
+        <li>Monitor for new harms continuously throughout the lifecycle</li>
+      </ul>
+      <div class="key-q-label">Key Question</div>
+      <div class="key-q">Who is harmed if this goes wrong?</div>
+    </div>
+    <div class="practice-card pc-3">
+      <div class="practice-num-wrap"><div class="p-num p-num-3">03</div></div>
+      <h3>Measure & Manage Risks</h3>
+      <p class="practice-desc">AI risks emerge from how systems behave in different situations — not just from software updates. Small issues can rapidly become systemic problems.</p>
+      <ul class="bullets b3">
+        <li>Build a fit-for-purpose AI risk management framework</li>
+        <li>Define your organisation's risk tolerance clearly</li>
+        <li>Conduct proportionate risk assessments for every AI system</li>
+        <li>Report and respond to incidents in a reasonable timeframe</li>
+      </ul>
+      <div class="key-q-label">Key Question</div>
+      <div class="key-q">When was this last reviewed?</div>
+    </div>
+    <div class="practice-card pc-4">
+      <div class="practice-num-wrap"><div class="p-num p-num-4">04</div></div>
+      <h3>Share Essential Information</h3>
+      <p class="practice-desc">People should know when they're interacting with AI and understand when AI decisions affect them. Transparency builds trust.</p>
+      <ul class="bullets b4">
+        <li>Maintain an up-to-date AI register across the organisation</li>
+        <li>Communicate clearly when and how AI is being used</li>
+        <li>Explain the capabilities, limitations, and risks of each system</li>
+        <li>Be transparent about AI-generated content</li>
+      </ul>
+      <div class="key-q-label">Key Question</div>
+      <div class="key-q">Can affected people understand this?</div>
+    </div>
+    <div class="practice-card pc-5">
+      <div class="practice-num-wrap"><div class="p-num p-num-5">05</div></div>
+      <h3>Test & Monitor</h3>
+      <p class="practice-desc">AI systems can change their behaviour over time. A system that worked well last month might behave differently today without anyone noticing.</p>
+      <ul class="bullets b5">
+        <li>Define clear acceptance criteria before deployment</li>
+        <li>Conduct thorough pre-deployment testing and document outcomes</li>
+        <li>Establish ongoing performance monitoring with defined metrics</li>
+        <li>Conduct regular audits proportionate to the level of risk</li>
+      </ul>
+      <div class="key-q-label">Key Question</div>
+      <div class="key-q">Who sees the monitoring results?</div>
+    </div>
+    <div class="practice-card pc-6">
+      <div class="practice-num-wrap"><div class="p-num p-num-6">06</div></div>
+      <h3>Maintain Human Control</h3>
+      <p class="practice-desc">Unlike traditional software, AI learns patterns and makes opaque decisions. Humans must be able to oversee, intervene, and stop AI systems when needed.</p>
+      <ul class="bullets b6">
+        <li>Retain human oversight throughout the entire AI lifecycle</li>
+        <li>Ensure there is always a way to override or shut down the system</li>
+        <li>Train staff on when and how to intervene</li>
+        <li>Have a clear decommissioning plan when systems are retired</li>
+      </ul>
+      <div class="key-q-label">Key Question</div>
+      <div class="key-q">Is override actually possible here?</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ INTERACTIVE MOMENTS ═══ -->
+<section class="moments-section">
+  <div class="section-eyebrow">During the Session</div>
+  <h2>Interactive Moments</h2>
+  <p class="body-text" style="max-width:680px;margin-bottom:48px;">Throughout the session you'll be invited to share your perspective via live polls and pair discussions. These help surface honest views and connect what you're hearing to your own experience.</p>
+
+  <div class="moments-timeline">
+
+    <div class="moment-row" style="border-radius:12px 12px 0 0;">
+      <div class="moment-label" style="background:var(--green);">
+        <div class="moment-label-text">OPEN</div>
+        <div class="moment-label-time">Start</div>
+      </div>
+      <div class="moment-body">
+        <div class="moment-tag" style="background:var(--green);color:var(--white);">Mentimeter word cloud</div>
+        <div class="moment-tag" style="background:rgba(232,75,58,0.1);color:var(--red);margin-left:6px;">Mentimeter multiple choice</div>
+        <div class="moment-q">"In one word — how do you feel about AI right now?"</div>
+        <div class="moment-desc" style="margin-bottom:16px;">Share the first word that comes to mind. There are no wrong answers — curious, nervous, excited, and overwhelmed are all equally welcome.</div>
+        <div class="moment-q">"What do you find the most interesting part of AI?"</div>
+        <div class="menti-opts-grid">
+          <div class="menti-opt">🤖 How AI makes decisions — and whether we can trust it</div>
+          <div class="menti-opt">💼 How it's changing the way we work</div>
+          <div class="menti-opt">🏙 Its impact on cities and society</div>
+          <div class="menti-opt">⚖️ The ethics and who's responsible</div>
+          <div class="menti-opt">🔮 What's coming next — future capabilities</div>
+          <div class="menti-opt">😟 The risks and what could go wrong</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="moment-row">
+      <div class="moment-label" style="background:var(--red);">
+        <div class="moment-label-text">WARM UP</div>
+        <div class="moment-label-time">5 mins</div>
+      </div>
+      <div class="moment-body">
+        <div class="moment-tag" style="background:var(--red);color:var(--white);">Pair activity</div>
+        <div class="moment-q">"Tell your neighbour one AI tool you've used this week — and whether it felt fine or a little weird."</div>
+        <div class="moment-desc">Two minutes with the person next to you, then a few pairs share back to the room. No preparation needed — just think about your week.</div>
+      </div>
+    </div>
+
+    <div class="moment-row">
+      <div class="moment-label" style="background:var(--purple);">
+        <div class="moment-label-text">BEFORE AI6</div>
+        <div class="moment-label-time">3 mins</div>
+      </div>
+      <div class="moment-body">
+        <div class="moment-tag" style="background:var(--purple);color:var(--white);">Mentimeter multiple choice</div>
+        <div class="moment-q">"Who is most responsible for making sure AI is used ethically?"</div>
+        <div class="menti-opts-grid">
+          <div class="menti-opt">🏛 The government</div>
+          <div class="menti-opt">🏢 The company deploying it</div>
+          <div class="menti-opt">🧑‍💻 The AI developer</div>
+          <div class="menti-opt">🤝 All of us equally</div>
+          <div class="menti-opt" style="grid-column:span 2;">❓ Nobody yet — it's unclear</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="moment-row">
+      <div class="moment-label" style="background:var(--yellow);">
+        <div class="moment-label-text" style="color:var(--black);">BEFORE ACTIVITY</div>
+        <div class="moment-label-time" style="color:rgba(0,0,0,0.5);">2 mins</div>
+      </div>
+      <div class="moment-body">
+        <div class="moment-tag" style="background:var(--yellow);color:var(--black);">Mentimeter yes/no poll</div>
+        <div class="moment-q">"Has your organisation ever done a formal AI risk assessment?"</div>
+        <div class="menti-opts-grid">
+          <div class="menti-opt">✅ Yes</div>
+          <div class="menti-opt">❌ No</div>
+          <div class="menti-opt">🤷 Not sure</div>
+          <div class="menti-opt">🔜 We don't use AI formally yet</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="moment-row">
+      <div class="moment-label" style="background:var(--blue);">
+        <div class="moment-label-text" style="color:var(--black);">DURING ACTIVITY</div>
+        <div class="moment-label-time" style="color:rgba(0,0,0,0.5);">1 min</div>
+      </div>
+      <div class="moment-body">
+        <div class="moment-tag" style="background:var(--blue);color:var(--black);">Mentimeter scale</div>
+        <div class="moment-q">"Before you start — how risky is your scenario on a scale of 1 to 10?"</div>
+        <div class="moment-desc">Vote individually before your group begins. You'll be asked again after the debrief to see if your view has changed.</div>
+      </div>
+    </div>
+
+    <div class="moment-row" style="border-radius:0 0 12px 12px;">
+      <div class="moment-label" style="background:var(--black);">
+        <div class="moment-label-text">CLOSE</div>
+        <div class="moment-label-time">3 mins</div>
+      </div>
+      <div class="moment-body">
+        <div class="moment-tag" style="background:var(--black);color:var(--white);">Mentimeter word cloud — revisit</div>
+        <div class="moment-q">"Same question: in one word, how do you feel about AI now?"</div>
+        <div class="moment-desc">We'll put your opening word cloud side-by-side with this one. Even a small shift tells a story.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ HOW IT WORKS ═══ -->
+<section class="how-section">
+  <div class="section-eyebrow">Group Activity</div>
+  <h2>How the Activity Works</h2>
+  <div class="steps-grid">
+    <div class="step">
+      <div class="step-pill s1">Step 1</div>
+      <h4>Pick Your Scenario</h4>
+      <p>Your group will be assigned one of six AI scenarios. Read it carefully — think about who is involved, what the AI does, and what could go wrong.</p>
+    </div>
+    <div class="step">
+      <div class="step-pill s2">Step 2</div>
+      <h4>Apply the AI6</h4>
+      <p>Work through each of the six practices as a group using the prompts in your scenario scorecard below. Don't skip any — even the tricky ones.</p>
+    </div>
+    <div class="step">
+      <div class="step-pill s3">Step 3</div>
+      <h4>Find the Hard Calls</h4>
+      <p>Every scenario has edge cases. Discuss: what's the catastrophic risk? What's your group's risk tolerance? Where do you draw the line?</p>
+    </div>
+    <div class="step">
+      <div class="step-pill s4">Step 4</div>
+      <h4>Present Back</h4>
+      <p>Each group shares their key findings with the room. What surprised you? Where did the framework challenge your assumptions?</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SCENARIOS ═══ -->
+<section class="scenarios-section">
+  <div class="scenarios-intro">
+    <div class="section-eyebrow">Group Scorecards</div>
+    <h2>Apply the AI6 to Your Scenario</h2>
+    <p class="body-text">All six scenarios are below. Find your group's scenario and work through the prompts together. The <strong>Hiring AI</strong> scenario includes a worked example to show you what a good answer looks like — all others are for your group to explore.</p>
+  </div>
+
+  <!-- ══ SCENARIO 1: HIRING (WORKED EXAMPLE) ══ -->
+  <div class="scenario-card">
+    <div class="sc-top">
+      <div class="sc-colour-bar" style="background:var(--green);"></div>
+      <div class="sc-header-content">
+        <div class="example-tag">✓ Worked Example</div>
+        <div class="sc-header-row">
+          <div class="sc-badge" style="background:var(--green);">01</div>
+          <div class="sc-emoji">📋</div>
+          <div class="sc-scenario-title">AI Resume Ranking for Hiring</div>
+        </div>
+      </div>
+    </div>
+    <div class="sc-scenario-desc">An AI system automatically processes resumes for a high-volume job role — scoring and ranking candidates based on keyword relevance, experience, and qualifications. A human recruiter reviews the ranked dashboard. The system has been running for 6 months without a formal review.</div>
+    <div class="prompts-grid">
+      <div class="prompt-cell worked-cell">
+        <div class="prompt-header"><div class="prompt-num" style="background:var(--green);">1</div><div class="prompt-title">Accountability</div></div>
+        <div class="worked-body">HR leadership and the platform vendor are typically named. The key gap: does your organisation have a <strong>named individual</strong> accountable for the AI's scoring logic — not just the vendor contract? As the system evolves, who is checking it still performs fairly?</div>
+      </div>
+      <div class="prompt-cell worked-cell">
+        <div class="prompt-header"><div class="prompt-num" style="background:var(--red);">2</div><div class="prompt-title">Understand Impacts</div></div>
+        <div class="worked-body"><strong>Key stakeholders:</strong> job applicants (especially from underrepresented groups), hiring managers, HR team, and the organisation's reputation. <strong>Core risk:</strong> bias baked into training data can systematically exclude qualified candidates before any human ever sees their application.</div>
+      </div>
+      <div class="prompt-cell worked-cell">
+        <div class="prompt-header"><div class="prompt-num" style="background:var(--purple);">3</div><div class="prompt-title">Measure & Manage Risks</div></div>
+        <div class="worked-body"><strong>Biggest risk:</strong> discriminatory screening at scale. <strong>Catastrophic scenario:</strong> the system has silently discriminated by gender or ethnicity for 6 months — legal exposure and reputational damage follow. <strong>Risk tolerance:</strong> low — someone's livelihood is at stake.</div>
+      </div>
+      <div class="prompt-cell worked-cell">
+        <div class="prompt-header"><div class="prompt-num" style="background:var(--yellow);color:var(--black);">4</div><div class="prompt-title">Share Essential Information</div></div>
+        <div class="worked-body"><strong>What to tell applicants:</strong> "Your application is initially reviewed by an AI ranking system before being assessed by a human recruiter." The AI register must document scoring criteria, data sources, known limitations, and bias test results.</div>
+      </div>
+    </div>
+    <div class="binary-strip">
+      <div class="binary-cell">
+        <div class="binary-text"><strong>5. Test &amp; Monitor</strong>Is there a regular schedule to check the AI is still performing accurately and hasn't "gone off track"?</div>
+        <div class="yn-wrap"><div class="yn-box" style="border-color:var(--green);color:var(--green);">YES</div><div class="yn-box">NO</div></div>
+      </div>
+      <div class="binary-cell">
+        <div class="binary-text"><strong>6. Human Control</strong>Does a human have the training and the "Big Red Button" to override or stop the AI if it starts making wrong decisions?</div>
+        <div class="yn-wrap"><div class="yn-box">YES</div><div class="yn-box">NO</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SCENARIO 2: BANK ══ -->
+  <div class="scenario-card">
+    <div class="sc-top">
+      <div class="sc-colour-bar" style="background:var(--red);"></div>
+      <div class="sc-header-content">
+        <div class="sc-header-row">
+          <div class="sc-badge" style="background:var(--red);">02</div>
+          <div class="sc-emoji">🏦</div>
+          <div class="sc-scenario-title">Bank Loan Pre-Approval Chatbot</div>
+        </div>
+      </div>
+    </div>
+    <div class="sc-scenario-desc">A chatbot on a bank's website provides preliminary pre-approval advice for small personal loans. Customers answer structured questions about their finances and receive an immediate AI-generated response based on the bank's lending criteria. The chatbot operates 24/7 with no human monitoring overnight.</div>
+    <div class="prompts-grid">
+      <div class="prompt-cell">
+        <div class="prompt-header"><div class="prompt-num" style="background:var(--green);">1</div><div class="prompt-title">Accountability</div></div>
+        <div class="prompt-q">Who at the bank is specifically accountable for the chatbot's advice — not just the contract with the vendor?</div>
+        <div class="prompt-q">What happens when the chatbot gives incorrect advice at 2am and no one is monitoring?</div>
+        <div class="write-line">Your group's notes…</div>
+      </div>
+      <div class="prompt-cell">
+        <div class="prompt-header"><div class="prompt-num" style="background:var(--red);">2</div><div class="prompt-title">Understand Impacts</div></div>
+        <div class="prompt-q">Who are the key stakeholders? Think beyond just "customers" — consider vulnerable groups and people in financial stress.</div>
+        <div class="prompt-q">What could go wrong for someone who acts on incorrect pre-approval advice?</div>
+        <div class="write-line">Your group's notes…</div>
+      </div>
+      <div class="prompt-cell">
+        <div class="prompt-header"><div class="prompt-num" style="background:var(--purple);">3</div><div class="prompt-title">Measure & Manage Risks</div></div>
+        <div class="prompt-q">What is the biggest risk? What would be the catastrophic scenario?</div>
+        <div class="prompt-q">Should the risk tolerance here be high, medium, or low — and why?</div>
+        <div class="write-line">Your group's notes…</div>
+      </div>
+      <div class="prompt-cell">
+        <div class="prompt-header"><div class="prompt-num" style="background:var(--yellow);color:var(--black);">4</div><div class="prompt-title">Share Essential Information</div></div>
+        <div class="prompt-q">What does the customer need to know before they start chatting with this AI? When should they be told?</div>
+        <div class="prompt-q">What should the bank's AI register document about this chatbot?</div>
+        <div class="write-line">Your group's notes…</div>
+      </div>
+    </div>
+    <div class="binary-strip">
+      <div class="binary-cell">
+        <div class="binary-text"><strong>5. Test &amp; Monitor</strong>Does the bank have a regular schedule to check the chatbot is still giving accurate advice?</div>
+        <div class="yn-wrap"><div class="yn-box">YES</div><div class="yn-box">NO</div></div>
+      </div>
+      <div class="binary-cell">
+        <div class="binary-text"><strong>6. Human Control</strong>Can a human override or shut down the chatbot if it starts giving wrong advice — including at 2am?</div>
+        <div class="yn-wrap"><div class="yn-box">YES</div><div class="yn-box">NO</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SCENARIO 3: DRONE ══ -->
+  <div class="scenario-card">
+    <div class="sc-top">
+      <div class="sc-colour-bar" style="background:var(--purple);"></div>
+      <div class="sc-header-content">
+        <div class="sc-header-row">
+          <div class="sc-badge" style="background:var(--purple);">03</div>
+          <div class="sc-emoji">🚁</div>
+          <div class="sc-scenario-title">Autonomous Weed-Spraying Drone</div>
+        </div>
+      </div>
+    </div>
+    <div class="sc-scenario-desc">An autonomous drone flies over agricultural fields using computer vision to identify weed species and automatically trigger a targeted herbicide sprayer. It operates across a shared paddock, documents treated locations, and optimises chemical usage independently — with no human on-site.</div>
+    <div class="prompts-grid">
+      <div class="prompt-cell">
+        <div class="prompt-header"><div class="prompt-num" style="background:var(--green);">1</div><div class="prompt-title">Accountability</div></div>
+        <div class="prompt-q">Who is accountable — the farm operator, the drone company, or both? How is responsibility split across the supply chain?</div>
+        <div class="prompt-q">In a shared paddock, what happens when the drone crosses a boundary or damages a neighbour's crop?</div>
+        <div class="write-line">Your group's notes…</div>
+      </div>
+      <div class="prompt-cell">
+        <div class="prompt-header"><div class="prompt-num" style="background:var(--red);">2</div><div class="prompt-title">Understand Impacts</div></div>
+        <div class="prompt-q">Who are all the affected stakeholders? Think beyond the farm owner — neighbouring landholders, workers, the environment.</div>
+        <div class="prompt-q">What environmental or community impacts could occur beyond the farm itself?</div>
+        <div class="write-line">Your group's notes…</div>
+      </div>
+      <div class="prompt-cell">
+        <div class="prompt-header"><div class="prompt-num" style="background:var(--purple);">3</div><div class="prompt-title">Measure & Manage Risks</div></div>
+        <div class="prompt-q">What could go catastrophically wrong with an autonomous spraying system operating without human oversight?</div>
+        <div class="prompt-q">How would you set the risk tolerance for a system operating in a shared environment affecting third parties?</div>
+        <div class="write-line">Your group's notes…</div>
+      </div>
+      <div class="prompt-cell">
+        <div class="prompt-header"><div class="prompt-num" style="background:var(--yellow);color:var(--black);">4</div><div class="prompt-title">Share Essential Information</div></div>
+        <div class="prompt-q">Who needs to know this system is operating, and what do they need to know?</div>
+        <div class="prompt-q">What records should be kept, and who should have access to them?</div>
+        <div class="write-line">Your group's notes…</div>
+      </div>
+    </div>
+    <div class="binary-strip">
+      <div class="binary-cell">
+        <div class="binary-text"><strong>5. Test &amp; Monitor</strong>Is the drone's species identification regularly tested for accuracy — especially as seasons and crops change?</div>
+        <div class="yn-wrap"><div class="yn-box">YES</div><div class="yn-box">NO</div></div>
+      </div>
+      <div class="binary-cell">
+        <div class="binary-text"><strong>6. Human Control</strong>Is there a reliable way to immediately stop the drone if it misidentifies crops — with no one on site?</div>
+        <div class="yn-wrap"><div class="yn-box">YES</div><div class="yn-box">NO</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SCENARIO 4: AGED CARE ══ -->
+  <div class="scenario-card">
+    <div class="sc-top">
+      <div class="sc-colour-bar" style="background:var(--yellow);"></div>
+      <div class="sc-header-content">
+        <div class="sc-header-row">
+          <div class="sc-badge" style="background:var(--yellow);color:var(--black);">04</div>
+          <div class="sc-emoji">🏥</div>
+          <div class="sc-scenario-title">Aged Care Fall-Prediction AI</div>
+        </div>
+      </div>
+    </div>
+    <div class="sc-scenario-desc">Discreet sensors in an aged care facility monitor residents' movement and behaviour patterns 24/7. The AI learns each person's baseline and sends real-time alerts to staff when it detects high fall-risk indicators — such as sudden changes in gait or unexpected movement at night.</div>
+    <div class="prompts-grid">
+      <div class="prompt-cell">
+        <div class="prompt-header"><div class="prompt-num" style="background:var(--green);">1</div><div class="prompt-title">Accountability</div></div>
+        <div class="prompt-q">Who is accountable when an alert is missed and a resident falls — the AI, the night staff, or facility management?</div>
+        <div class="prompt-q">How should accountability be documented across the sensor vendor, AI provider, and care facility?</div>
+        <div class="write-line">Your group's notes…</div>
+      </div>
+      <div class="prompt-cell">
+        <div class="prompt-header"><div class="prompt-num" style="background:var(--red);">2</div><div class="prompt-title">Understand Impacts</div></div>
+        <div class="prompt-q">Who are all the affected stakeholders? Consider residents, families, care staff, and the facility.</div>
+        <div class="prompt-q">What are the privacy implications of continuous monitoring in a person's bedroom? How do you weigh safety vs dignity?</div>
+        <div class="write-line">Your group's notes…</div>
+      </div>
+      <div class="prompt-cell">
+        <div class="prompt-header"><div class="prompt-num" style="background:var(--purple);">3</div><div class="prompt-title">Measure & Manage Risks</div></div>
+        <div class="prompt-q">What are the risks of too many alerts (alert fatigue) vs too few (missed falls)?</div>
+        <div class="prompt-q">Describe the catastrophic scenario for this system. What should the risk tolerance be?</div>
+        <div class="write-line">Your group's notes…</div>
+      </div>
+      <div class="prompt-cell">
+        <div class="prompt-header"><div class="prompt-num" style="background:var(--yellow);color:var(--black);">4</div><div class="prompt-title">Share Essential Information</div></div>
+        <div class="prompt-q">What do residents and families need to know about this system? When and how should they be informed?</div>
+        <div class="prompt-q">Should residents be able to opt out? What are the implications if they do?</div>
+        <div class="write-line">Your group's notes…</div>
+      </div>
+    </div>
+    <div class="binary-strip">
+      <div class="binary-cell">
+        <div class="binary-text"><strong>5. Test &amp; Monitor</strong>Is the system regularly tested to ensure it's still accurately detecting each resident's patterns over time?</div>
+        <div class="yn-wrap"><div class="yn-box">YES</div><div class="yn-box">NO</div></div>
+      </div>
+      <div class="binary-cell">
+        <div class="binary-text"><strong>6. Human Control</strong>Do staff have clear training and authority to override, question, or escalate when an alert doesn't feel right?</div>
+        <div class="yn-wrap"><div class="yn-box">YES</div><div class="yn-box">NO</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SCENARIO 5: EDUCATION ══ -->
+  <div class="scenario-card">
+    <div class="sc-top">
+      <div class="sc-colour-bar" style="background:var(--blue);"></div>
+      <div class="sc-header-content">
+        <div class="sc-header-row">
+          <div class="sc-badge" style="background:var(--blue);color:var(--black);">05</div>
+          <div class="sc-emoji">🎓</div>
+          <div class="sc-scenario-title">Education At-Risk Student Flagging Tool</div>
+        </div>
+      </div>
+    </div>
+    <div class="sc-scenario-desc">Integrated into a school's Learning Management System, the AI continuously analyses attendance and grades against historical data. It flags students at risk of failing on a dashboard visible to teachers and administrators — prompting early intervention before the student knows they've been flagged.</div>
+    <div class="prompts-grid">
+      <div class="prompt-cell">
+        <div class="prompt-header"><div class="prompt-num" style="background:var(--green);">1</div><div class="prompt-title">Accountability</div></div>
+        <div class="prompt-q">When a student is incorrectly flagged — or not flagged when they should be — who is responsible for the outcome?</div>
+        <div class="prompt-q">How should accountability be shared between the school, the EdTech vendor, and classroom teachers?</div>
+        <div class="write-line">Your group's notes…</div>
+      </div>
+      <div class="prompt-cell">
+        <div class="prompt-header"><div class="prompt-num" style="background:var(--red);">2</div><div class="prompt-title">Understand Impacts</div></div>
+        <div class="prompt-q">Who are all the affected stakeholders? Think beyond students and teachers.</div>
+        <div class="prompt-q">Could this system create stigma or affect how teachers treat certain students? How might it disproportionately impact particular groups?</div>
+        <div class="write-line">Your group's notes…</div>
+      </div>
+      <div class="prompt-cell">
+        <div class="prompt-header"><div class="prompt-num" style="background:var(--purple);">3</div><div class="prompt-title">Measure & Manage Risks</div></div>
+        <div class="prompt-q">What biases might be embedded in the historical data the AI is trained on? What is the worst-case outcome?</div>
+        <div class="prompt-q">How does the risk tolerance differ when a child's educational future is at stake vs a business outcome?</div>
+        <div class="write-line">Your group's notes…</div>
+      </div>
+      <div class="prompt-cell">
+        <div class="prompt-header"><div class="prompt-num" style="background:var(--yellow);color:var(--black);">4</div><div class="prompt-title">Share Essential Information</div></div>
+        <div class="prompt-q">Should students and families be told if a student has been flagged? How would you communicate it without causing harm?</div>
+        <div class="prompt-q">Should families be able to challenge or request a review of a flag? How would that process work?</div>
+        <div class="write-line">Your group's notes…</div>
+      </div>
+    </div>
+    <div class="binary-strip">
+      <div class="binary-cell">
+        <div class="binary-text"><strong>5. Test &amp; Monitor</strong>Is the flagging tool regularly audited for accuracy and for potential bias across different student demographics?</div>
+        <div class="yn-wrap"><div class="yn-box">YES</div><div class="yn-box">NO</div></div>
+      </div>
+      <div class="binary-cell">
+        <div class="binary-text"><strong>6. Human Control</strong>Can a teacher override a flag, and does the system support human judgment rather than replacing it?</div>
+        <div class="yn-wrap"><div class="yn-box">YES</div><div class="yn-box">NO</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SCENARIO 6: LOGISTICS ══ -->
+  <div class="scenario-card">
+    <div class="sc-top">
+      <div class="sc-colour-bar" style="background:var(--black);"></div>
+      <div class="sc-header-content">
+        <div class="sc-header-row">
+          <div class="sc-badge" style="background:var(--black);">06</div>
+          <div class="sc-emoji">📦</div>
+          <div class="sc-scenario-title">AI Auto-Ordering from Social Media Trends</div>
+        </div>
+      </div>
+    </div>
+    <div class="sc-scenario-desc">Operating in the background of an inventory system, this AI monitors social media to predict demand and automatically generates and submits production orders to overseas factories — with no manual approval required for routine orders. The business first learns of orders when confirmation arrives.</div>
+    <div class="prompts-grid">
+      <div class="prompt-cell">
+        <div class="prompt-header"><div class="prompt-num" style="background:var(--green);">1</div><div class="prompt-title">Accountability</div></div>
+        <div class="prompt-q">Who in the organisation is accountable for orders the AI places autonomously — especially if those orders are wrong or excessive?</div>
+        <div class="prompt-q">How is responsibility shared between the business, the AI platform provider, and the overseas factories?</div>
+        <div class="write-line">Your group's notes…</div>
+      </div>
+      <div class="prompt-cell">
+        <div class="prompt-header"><div class="prompt-num" style="background:var(--red);">2</div><div class="prompt-title">Understand Impacts</div></div>
+        <div class="prompt-q">Who are the stakeholders beyond the business? Think about factory workers, the environment, and consumers.</div>
+        <div class="prompt-q">Could this system be manipulated externally — for example, by manufactured social media trends? Who would be harmed?</div>
+        <div class="write-line">Your group's notes…</div>
+      </div>
+      <div class="prompt-cell">
+        <div class="prompt-header"><div class="prompt-num" style="background:var(--purple);">3</div><div class="prompt-title">Measure & Manage Risks</div></div>
+        <div class="prompt-q">What would a catastrophic failure look like? How quickly could one bad trend prediction cause serious damage?</div>
+        <div class="prompt-q">Should an AI be allowed to commit the organisation to binding financial contracts without human approval? Where is the line?</div>
+        <div class="write-line">Your group's notes…</div>
+      </div>
+      <div class="prompt-cell">
+        <div class="prompt-header"><div class="prompt-num" style="background:var(--yellow);color:var(--black);">4</div><div class="prompt-title">Share Essential Information</div></div>
+        <div class="prompt-q">What do internal teams — procurement, finance, leadership — need to know about what the AI is ordering and why?</div>
+        <div class="prompt-q">Should overseas factories be informed they are receiving AI-generated orders? What transparency obligations exist?</div>
+        <div class="write-line">Your group's notes…</div>
+      </div>
+    </div>
+    <div class="binary-strip">
+      <div class="binary-cell">
+        <div class="binary-text"><strong>5. Test &amp; Monitor</strong>Is there a regular review of the AI's ordering decisions and their accuracy against actual demand outcomes?</div>
+        <div class="yn-wrap"><div class="yn-box">YES</div><div class="yn-box">NO</div></div>
+      </div>
+      <div class="binary-cell">
+        <div class="binary-text"><strong>6. Human Control</strong>Is there a spending cap or human approval threshold — a point where a human must sign off before the AI can commit?</div>
+        <div class="yn-wrap"><div class="yn-box">YES</div><div class="yn-box">NO</div></div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ═══ DEBRIEF ═══ -->
+<section class="cta-band">
+  <div>
+    <div class="section-eyebrow" style="color:var(--purple);">Group Debrief</div>
+    <h2>Presenting Back to the Room</h2>
+    <p style="font-size:16px;font-weight:300;color:rgba(0,0,0,0.65);line-height:1.75;margin-bottom:16px;">When you share back, don't just read your answers — share what surprised you, what your group disagreed on, and where the framework felt most challenging to apply.</p>
+  </div>
+  <div>
+    <ul class="debrief-list">
+      <li><div class="dot"></div><span><strong>Who did you name as accountable?</strong> Was it obvious, or did your group disagree?</span></li>
+      <li><div class="dot"></div><span><strong>What stakeholder did you almost miss?</strong> The most affected are often not the most visible.</span></li>
+      <li><div class="dot"></div><span><strong>What was your catastrophic risk?</strong> Did your group agree on the risk tolerance?</span></li>
+      <li><div class="dot"></div><span><strong>Yes or No on monitoring and human control?</strong> How many organisations would honestly answer Yes?</span></li>
+      <li><div class="dot"></div><span><strong>What would you change about this AI system</strong> to make it more responsibly governed?</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ═══ KEY TAKEAWAYS ═══ -->
+<section class="takeaways-section">
+  <div class="takeaways-inner">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:36px;flex-wrap:wrap;gap:16px;">
+      <div>
+        <div class="section-eyebrow" style="color:var(--green);margin-bottom:10px;">Key Takeaways</div>
+        <h2 style="color:var(--white);font-size:clamp(36px,5vw,64px);line-height:0.95;margin-bottom:0;">What to do<br><span style="color:var(--green);">this week</span></h2>
+      </div>
+      <div class="logo-box-f">Ai&<br>society</div>
+    </div>
+    <div style="background:rgba(155,127,212,0.15);border-left:3px solid var(--purple);border-radius:0 8px 8px 0;padding:16px 22px;margin-bottom:40px;max-width:700px;">
+      <p style="font-size:16px;font-weight:400;color:rgba(255,255,255,0.85);font-style:italic;line-height:1.6;margin:0;"><strong style="color:var(--white);font-style:normal;font-weight:600;">"You don't need to be a technologist to govern AI.</strong> You just need to ask the right questions."</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:40px;">
+      <div style="background:rgba(62,191,106,0.12);border:1px solid rgba(62,191,106,0.25);border-radius:10px;padding:22px 18px;display:flex;flex-direction:column;gap:12px;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:34px;font-weight:900;color:var(--green);line-height:1;">01</div>
+        <div><div style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:6px;">Name it</div><div style="font-size:13px;font-weight:300;color:rgba(255,255,255,0.8);line-height:1.55;">Identify one AI tool your org uses and ask: is there a named person accountable for it?</div></div>
+      </div>
+      <div style="background:rgba(232,75,58,0.1);border:1px solid rgba(232,75,58,0.2);border-radius:10px;padding:22px 18px;display:flex;flex-direction:column;gap:12px;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:34px;font-weight:900;color:var(--red);line-height:1;">02</div>
+        <div><div style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:6px;">Find the button</div><div style="font-size:13px;font-weight:300;color:rgba(255,255,255,0.8);line-height:1.55;">Does a "Big Red Button" exist? Can someone actually stop this system if it goes wrong?</div></div>
+      </div>
+      <div style="background:rgba(155,127,212,0.12);border:1px solid rgba(155,127,212,0.25);border-radius:10px;padding:22px 18px;display:flex;flex-direction:column;gap:12px;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:34px;font-weight:900;color:var(--purple);line-height:1;">03</div>
+        <div><div style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:6px;">Find the gaps</div><div style="font-size:13px;font-weight:300;color:rgba(255,255,255,0.8);line-height:1.55;">Who is most affected by your AI systems but not in the room when decisions are made?</div></div>
+      </div>
+      <div style="background:rgba(245,200,66,0.1);border:1px solid rgba(245,200,66,0.2);border-radius:10px;padding:22px 18px;display:flex;flex-direction:column;gap:12px;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:34px;font-weight:900;color:var(--yellow);line-height:1;">04</div>
+        <div><div style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:6px;">Check the register</div><div style="font-size:13px;font-weight:300;color:rgba(255,255,255,0.8);line-height:1.55;">Does your org have an AI register? If not — that's where to start.</div></div>
+      </div>
+      <div style="background:rgba(123,184,212,0.1);border:1px solid rgba(123,184,212,0.2);border-radius:10px;padding:22px 18px;display:flex;flex-direction:column;gap:12px;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:34px;font-weight:900;color:var(--blue);line-height:1;">05</div>
+        <div><div style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:6px;">Share it</div><div style="font-size:13px;font-weight:300;color:rgba(255,255,255,0.8);line-height:1.55;">Send one colleague the AI6 framework link. Governance only works when more people know about it.</div></div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;padding-top:24px;border-top:1px solid rgba(255,255,255,0.08);flex-wrap:wrap;gap:20px;">
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:9px;">
+          <div style="width:34px;height:34px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;color:var(--white);">SA</div>
+          <div><div style="font-size:14px;font-weight:600;color:var(--white);">Sophia Arkinstall</div><div style="font-size:11px;font-weight:300;color:rgba(255,255,255,0.4);">Founder · AI & Society</div></div>
+        </div>
+        <div style="width:1px;height:34px;background:rgba(255,255,255,0.1);"></div>
+        <div style="display:flex;align-items:center;gap:9px;">
+          <div style="width:34px;height:34px;border-radius:50%;background:var(--purple);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;color:var(--white);">VF</div>
+          <div><div style="font-size:14px;font-weight:600;color:var(--white);">Veve Fry</div><div style="font-size:11px;font-weight:300;color:rgba(255,255,255,0.4);">Assistant Facilitator</div></div>
+        </div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:12px;font-weight:600;color:rgba(255,255,255,0.5);margin-bottom:3px;">Moreton Bay Women Building Tomorrow's Tech · 2026</div>
+        <a href="https://aiandsociety.io" target="_blank" style="font-size:12px;color:var(--green);text-decoration:none;font-weight:400;">aiandsociety.io</a>
+        <span style="font-size:12px;color:rgba(255,255,255,0.2);margin:0 6px;">·</span>
+        <a href="mailto:sophia@aiandsociety.io" style="font-size:12px;color:rgba(255,255,255,0.4);text-decoration:none;">sophia@aiandsociety.io</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="logo-box-f">Ai&<br>society</div>
+      <p>A community built around exploring AI and its impact on society — through events, workshops, and honest conversation.</p>
+      <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;">
+        <a href="https://www.linkedin.com/company/ai-and-society/" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);border-radius:6px;padding:7px 14px;font-size:12px;font-weight:500;color:rgba(255,255,255,0.75);text-decoration:none;transition:all 0.2s;" onmouseover="this.style.background='#0A66C2';this.style.borderColor='#0A66C2';this.style.color='#fff'" onmouseout="this.style.background='rgba(255,255,255,0.08)';this.style.borderColor='rgba(255,255,255,0.14)';this.style.color='rgba(255,255,255,0.75)'">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          AI & Society
+        </a>
+        <a href="https://www.linkedin.com/in/sophiaarkinstall/" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);border-radius:6px;padding:7px 14px;font-size:12px;font-weight:500;color:rgba(255,255,255,0.75);text-decoration:none;transition:all 0.2s;" onmouseover="this.style.background='#0A66C2';this.style.borderColor='#0A66C2';this.style.color='#fff'" onmouseout="this.style.background='rgba(255,255,255,0.08)';this.style.borderColor='rgba(255,255,255,0.14)';this.style.color='rgba(255,255,255,0.75)'">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          Sophia Arkinstall
+        </a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <p>Sophia Arkinstall</p>
+      <a href="mailto:sophia@aiandsociety.io" class="hl">sophia@aiandsociety.io</a>
+      <a href="https://aiandsociety.io" target="_blank" class="hl">aiandsociety.io</a>
+    </div>
+    <div class="footer-col">
+      <h4>This Workshop</h4>
+      <p>The Guardian Workshop</p>
+      <p>Responsible AI Governance</p>
+      <p>Moreton Bay Women Building Tomorrow's Tech · 2026</p>
+      <a href="https://www.industry.gov.au/publications/guidance-for-ai-adoption/guidance-ai-adoption-implementation-practices" target="_blank" style="display:inline-flex;align-items:center;gap:6px;margin-top:14px;background:var(--green);border-radius:6px;padding:9px 16px;font-size:12px;font-weight:600;color:var(--white);text-decoration:none;transition:opacity 0.2s;line-height:1.3;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        View the AI6 Framework ↗
+      </a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 AI & Society · Founded by Sophia Arkinstall · Brisbane, Australia</span>
+    <div class="footer-pills">
+      <span class="pill pill-green" style="font-size:11px;">Learning</span>
+      <span class="pill pill-red" style="font-size:11px;">Events</span>
+      <span class="pill pill-purple" style="font-size:11px;">Community</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
